@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:doodi/constants/colors.dart';
 import 'package:doodi/constants/text_style.dart';
+import 'package:flutter/services.dart';
 
 class GameCard extends StatefulWidget {
   final String question;
@@ -34,6 +35,7 @@ class _GameCardState extends State<GameCard> {
       margin: const EdgeInsets.symmetric(vertical: 10),
       elevation: 3,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      color: Theme.of(context).cardColor,
       child: Padding(
         padding: const EdgeInsets.all(18),
         child: Column(
@@ -178,57 +180,82 @@ class _GameCardState extends State<GameCard> {
 
                       builder: (BuildContext context) {
                         return AlertDialog(
-                          title: Text(
-                            '게임을 삭제하시겠습니까?',
-                            style: AppTextStyles.free15.copyWith(
-                              color: Theme.of(context).iconTheme.color,
-                            ),
+                          title: Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(right: 5),
+                                child: Icon(Icons.error_outline),
+                              ),
+
+                              Text(
+                                '게임을 삭제하시겠습니까?',
+                                style: AppTextStyles.free15.copyWith(
+                                  color: Theme.of(context).iconTheme.color,
+                                ),
+                              ),
+                            ],
                           ),
                           content: SingleChildScrollView(
                             child: ListBody(
                               children: <Widget>[
                                 Text(
-                                  '게임 등록 시 설정한 비밀번호를 입력해주세요.',
+                                  '게임을 삭제하려면 \n게임 등록 시 설정한 비밀번호를 입력하세요.',
                                   style: AppTextStyles.lightFree12.copyWith(
                                     color: Theme.of(context).iconTheme.color,
                                   ),
                                 ),
-                                TextField(
-                                  obscureText: true,
-                                  decoration: InputDecoration(
-                                    hintText: '예) 1234',
-                                    hintStyle: AppTextStyles.free13,
+                                Container(
+                                  height: 55,
+                                  child: TextField(
+                                    maxLength: 4,
+                                    obscureText: true,
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.digitsOnly,
+                                    ],
+                                    decoration: InputDecoration(
+                                      hintText: '예) 1234',
+                                      hintStyle: AppTextStyles.free15,
+                                      contentPadding: EdgeInsets.symmetric(
+                                        vertical: 15,
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ],
                             ),
                           ),
                           actions: <Widget>[
-                            Row(
-                              children: [
-                                TextButton(
-                                  child: Text(
-                                    '취소',
-                                    style: AppTextStyles.free13.copyWith(
-                                      color: Theme.of(context).iconTheme.color,
+                            Container(
+                              height: 25,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  TextButton(
+                                    child: Text(
+                                      '취소',
+                                      style: AppTextStyles.free13.copyWith(
+                                        color: Theme.of(
+                                          context,
+                                        ).iconTheme.color,
+                                      ),
                                     ),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
                                   ),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                                TextButton(
-                                  child: Text(
-                                    '삭제',
-                                    style: AppTextStyles.free13.copyWith(
-                                      color: AppColors.pointBlue,
+                                  TextButton(
+                                    child: Text(
+                                      '삭제',
+                                      style: AppTextStyles.free15.copyWith(
+                                        color: AppColors.pointBlue,
+                                      ),
                                     ),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
                                   ),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ],
                         );
@@ -237,7 +264,7 @@ class _GameCardState extends State<GameCard> {
                   },
                   child: Text(
                     '삭제',
-                    style: AppTextStyles.free13.copyWith(
+                    style: AppTextStyles.free15.copyWith(
                       color: Theme.of(context).textTheme.bodyMedium?.color,
                     ),
                   ),

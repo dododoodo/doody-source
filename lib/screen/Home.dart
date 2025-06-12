@@ -1,9 +1,9 @@
-import 'package:doodi/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:doodi/constants/colors.dart';
 import 'package:doodi/constants/text_style.dart';
 import 'package:doodi/components/game_card.dart';
 
+// Map의 key가 String, value는 dynamic(뭐든 가능)
 List<Map<String, dynamic>> gameList = [
   {
     'question': '가장 가지고 싶은 초능력은?',
@@ -50,11 +50,11 @@ class _MyWidgetState extends State<Home> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
+        SingleChildScrollView(
+          controller: _scrollController,
           child: Column(
             children: [
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
 
               // 검색 창
               SizedBox(
@@ -77,7 +77,7 @@ class _MyWidgetState extends State<Home> {
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
                         width: 1,
-                        color: AppColors.darkModeColor,
+                        color: Theme.of(context).dividerColor,
                       ),
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -96,36 +96,28 @@ class _MyWidgetState extends State<Home> {
                 ),
               ),
 
-              SizedBox(height: 40),
+              const SizedBox(height: 40),
 
-              // 밸런스 게임 카드
-              ListView.builder(
-                physics: NeverScrollableScrollPhysics(), // 사용자 스크롤 막기
-                shrinkWrap: true, // 자식 아이템 크기만큼만 공간 차지
-                controller: _scrollController,
-                itemCount: gameList.length,
-                itemBuilder: (context, index) {
-                  final game = gameList[index];
-                  // GameCard 컴포넌트
-                  return GameCard(
-                    question: game['question'],
-                    optionA: game['optionA'],
-                    optionB: game['optionB'],
-                    likeCount: game['like'],
-                    dislikeCount: game['dislike'],
-                  );
-                },
+              // 밸런스 게임 카드 리스트
+              ...gameList.map(
+                (game) => GameCard(
+                  question: game['question'],
+                  optionA: game['optionA'],
+                  optionB: game['optionB'],
+                  likeCount: game['like'],
+                  dislikeCount: game['dislike'],
+                ),
               ),
 
-              SizedBox(height: 40),
+              const SizedBox(height: 40),
             ],
           ),
         ),
 
-        // 탑 버튼
+        // 스크롤 탑 버튼
         Positioned(
           bottom: 30,
-          right: 24,
+          right: 0,
           child: FloatingActionButton(
             shape: const CircleBorder(),
             mini: true,

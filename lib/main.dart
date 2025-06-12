@@ -32,7 +32,8 @@ class MyApp extends StatelessWidget {
           seedColor: AppColors.blackColor,
           brightness: Brightness.light,
         ),
-        cardColor: Color(0xFFFFFFFF),
+        cardColor: AppColors.whiteColor,
+        dividerColor: AppColors.lineColor,
       ),
 
       // Dark Theme
@@ -49,6 +50,7 @@ class MyApp extends StatelessWidget {
           brightness: Brightness.dark,
         ),
         cardColor: Color(0xFF1E1E1E),
+        dividerColor: AppColors.darkModeColor,
       ),
 
       themeMode: ThemeMode.system,
@@ -93,11 +95,9 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
 
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: pageList[pageIndex],
-        ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        child: pageList[pageIndex],
       ),
 
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
