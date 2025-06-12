@@ -1,5 +1,4 @@
 // import 'package:doodi/screen/NewPost.dart';
-import 'package:doodi/theme/ThemeData.dart';
 import 'package:doodi/screen/Home.dart';
 import 'package:doodi/screen/NewPost.dart';
 import 'package:doodi/screen/Settings.dart';
@@ -94,7 +93,12 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
 
-      body: SingleChildScrollView(child: pageList[pageIndex]),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: pageList[pageIndex],
+        ),
+      ),
 
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
 

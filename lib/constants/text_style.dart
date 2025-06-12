@@ -6,6 +6,11 @@ class AppTextStyles {
     fontFamily: 'ria-r',
   );
 
+  static const TextStyle pageTitle = TextStyle(
+    fontSize: 17,
+    fontFamily: 'ria-r',
+  );
+
   static const TextStyle free25 = TextStyle(fontSize: 25, fontFamily: 'free-7');
 
   static const TextStyle free17 = TextStyle(fontSize: 17, fontFamily: 'free-4');
@@ -20,6 +25,11 @@ class AppTextStyles {
 
   static const TextStyle lightFree12 = TextStyle(
     fontSize: 12,
+    fontFamily: 'free-2',
+  );
+
+  static const TextStyle lightFree10 = TextStyle(
+    fontSize: 10,
     fontFamily: 'free-2',
   );
 }
