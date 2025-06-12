@@ -75,31 +75,31 @@ class _MyWidgetState extends State<Settings> {
           ),
         ),
 
-        Expanded(
-          child: ListView.builder(
-            itemCount: menu.length,
-            itemBuilder: (context, idx) {
-              final item = menu[idx];
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // 아이콘 + 타이틀
-                  Row(
-                    children: [
-                      Icon(item['icon']),
-                      SizedBox(width: 7),
-                      Text(item['title'], style: TextStyle(fontSize: 15)),
-                    ],
-                  ),
-                  SizedBox(height: 10),
+        ListView.builder(
+          physics: NeverScrollableScrollPhysics(), // 사용자 스크롤 막기
+          shrinkWrap: true, // 자식 아이템 크기만큼만 공간 차지
+          itemCount: menu.length,
+          itemBuilder: (context, idx) {
+            final item = menu[idx];
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // 아이콘 + 타이틀
+                Row(
+                  children: [
+                    Icon(item['icon']),
+                    SizedBox(width: 7),
+                    Text(item['title'], style: TextStyle(fontSize: 15)),
+                  ],
+                ),
+                SizedBox(height: 10),
 
-                  // 위젯 등 내용
-                  item['content'],
-                  SizedBox(height: 35),
-                ],
-              );
-            },
-          ),
+                // 위젯 등 내용
+                item['content'],
+                SizedBox(height: 35),
+              ],
+            );
+          },
         ),
       ],
     );

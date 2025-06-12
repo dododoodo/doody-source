@@ -75,7 +75,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  List<Widget> get pageList => [Home(), Settings()];
+  List<Widget> get pageList => [Home(), NewPost(), Settings()];
 
   @override
   Widget build(BuildContext context) {
@@ -94,7 +94,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
 
-      body: pageList[pageIndex],
+      body: SingleChildScrollView(child: pageList[pageIndex]),
 
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
 
@@ -108,17 +108,10 @@ class _MyHomePageState extends State<MyHomePage> {
             : const Color.fromRGBO(18, 18, 18, 0.5),
 
         onTap: (index) {
-          if (index == 1) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => NewPost()),
-            );
-          } else {
-            setState(() {
-              navIndex = index;
-              pageIndex = index == 0 ? 0 : 1;
-            });
-          }
+          setState(() {
+            navIndex = index;
+            pageIndex = index;
+          });
         },
 
         items: [

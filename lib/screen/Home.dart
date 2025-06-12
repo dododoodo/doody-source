@@ -99,22 +99,22 @@ class _MyWidgetState extends State<Home> {
               SizedBox(height: 40),
 
               // 밸런스 게임 카드
-              Expanded(
-                child: ListView.builder(
-                  controller: _scrollController,
-                  itemCount: gameList.length,
-                  itemBuilder: (context, index) {
-                    final game = gameList[index];
-                    // GameCard 컴포넌트
-                    return GameCard(
-                      question: game['question'],
-                      optionA: game['optionA'],
-                      optionB: game['optionB'],
-                      likeCount: game['like'],
-                      dislikeCount: game['dislike'],
-                    );
-                  },
-                ),
+              ListView.builder(
+                physics: NeverScrollableScrollPhysics(), // 사용자 스크롤 막기
+                shrinkWrap: true, // 자식 아이템 크기만큼만 공간 차지
+                controller: _scrollController,
+                itemCount: gameList.length,
+                itemBuilder: (context, index) {
+                  final game = gameList[index];
+                  // GameCard 컴포넌트
+                  return GameCard(
+                    question: game['question'],
+                    optionA: game['optionA'],
+                    optionB: game['optionB'],
+                    likeCount: game['like'],
+                    dislikeCount: game['dislike'],
+                  );
+                },
               ),
 
               SizedBox(height: 40),
