@@ -4,9 +4,18 @@ import 'package:doodi/screen/NewPost.dart';
 import 'package:doodi/screen/Settings.dart';
 import 'package:flutter/material.dart';
 import 'package:doodi/constants/colors.dart';
+import 'package:doodi/constants/text_style.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
-void main() {
+void main() async {
+  // hive 초기 설정
+  WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+  await Hive.openBox('votes');
+  await Hive.openBox('like_dislike');
   runApp(const MyApp());
 }
 
@@ -25,8 +34,11 @@ class MyApp extends StatelessWidget {
         bottomAppBarTheme: BottomAppBarTheme(color: AppColors.whiteColor),
         iconTheme: IconThemeData(color: AppColors.blackColor),
         fontFamily: 'free-4',
-        textTheme: const TextTheme(
+        textTheme: TextTheme(
           bodyMedium: TextStyle(color: AppColors.blackColor),
+          bodySmall: AppTextStyles.lightFree12.copyWith(
+            color: AppColors.blackColor,
+          ),
         ),
         colorScheme: ColorScheme.fromSeed(
           seedColor: AppColors.blackColor,
@@ -42,9 +54,13 @@ class MyApp extends StatelessWidget {
         appBarTheme: AppBarTheme(backgroundColor: AppColors.blackColor),
         bottomAppBarTheme: BottomAppBarTheme(color: AppColors.blackColor),
         iconTheme: IconThemeData(color: AppColors.whiteColor),
-        textTheme: const TextTheme(
+        textTheme: TextTheme(
           bodyMedium: TextStyle(color: AppColors.whiteColor),
+          bodySmall: AppTextStyles.lightFree12.copyWith(
+            color: AppColors.lineColor,
+          ),
         ),
+
         colorScheme: ColorScheme.fromSeed(
           seedColor: AppColors.whiteColor,
           brightness: Brightness.dark,
