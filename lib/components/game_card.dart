@@ -40,9 +40,6 @@ class _GameCardState extends State<GameCard> {
   int answerACount = 0;
   int answerBCount = 0;
 
-  int currentLikeCount = 0;
-  int currentDislikeCount = 0;
-
   // --- A/B 투표 결과 저장하기 ---
   Future<void> vote(String selectedOption, BuildContext context) async {
     // votes 저장소 생성하기
@@ -109,22 +106,6 @@ class _GameCardState extends State<GameCard> {
     });
   }
 
-  // --- 서버에서 좋아요/싫어요 수 불러오는 함수 ---
-  Future<void> fetchLikeDislikeCount() async {
-    final url = Uri.parse(
-      'http://localhost/doody/api/get_like_count.php?game_id=${widget.gameId}',
-    );
-    final response = await http.get(url);
-
-    final data = jsonDecode(response.body);
-
-    // 상태 업데이트 하기
-    setState(() {
-      currentLikeCount = data['like'] ?? 0;
-      currentDislikeCount = data['dislike'] ?? 0;
-    });
-  }
-
   // --- 초기 세팅 ---
   @override
   void initState() {
@@ -141,24 +122,6 @@ class _GameCardState extends State<GameCard> {
       // A,B 선택 수 가져오기
       fetchVoteCount();
     }
-
-    currentLikeCount = widget.likeCount;
-    currentDislikeCount = widget.dislikeCount;
-
-    final likeBox = Hive.box('like_dislike');
-    final key = 'game_${widget.gameId}';
-    final action = likeBox.get(key);
-    if (action != null) {
-      if (action == 'like') {
-        isLiked = true;
-        isDisliked = false;
-      } else if (action == 'dislike') {
-        isLiked = false;
-        isDisliked = true;
-      }
-    }
-
-    fetchLikeDislikeCount();
   }
 
   // --- 좋아요/싫어요 표시 ---
@@ -186,11 +149,9 @@ class _GameCardState extends State<GameCard> {
       if (action == 'like') {
         isLiked = true;
         isDisliked = false;
-        currentLikeCount += 1;
       } else {
         isDisliked = true;
         isLiked = false;
-        currentDislikeCount += 1;
       }
     });
 
@@ -388,7 +349,6 @@ class _GameCardState extends State<GameCard> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              textAlign: TextAlign.center,
                               widget.optionA,
                               style: AppTextStyles.free25.copyWith(
                                 color: AppColors.pointYellow,
@@ -443,7 +403,6 @@ class _GameCardState extends State<GameCard> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              textAlign: TextAlign.center,
                               widget.optionB,
                               style: AppTextStyles.free25.copyWith(
                                 color: AppColors.pointBlue,
@@ -488,7 +447,7 @@ class _GameCardState extends State<GameCard> {
                   ),
                 ),
                 // 클릭 시 1 증가
-                Text('$currentLikeCount'),
+                Text('${widget.likeCount + (isLiked ? 1 : 0)}'),
 
                 const SizedBox(width: 10),
 
@@ -508,7 +467,7 @@ class _GameCardState extends State<GameCard> {
                         : Theme.of(context).iconTheme.color,
                   ),
                 ),
-                Text('$currentDislikeCount'),
+                Text('${widget.dislikeCount + (isDisliked ? 1 : 0)}'),
 
                 const Spacer(),
 

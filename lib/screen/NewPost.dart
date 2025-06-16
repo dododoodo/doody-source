@@ -3,7 +3,6 @@ import 'package:doodi/components/alerts.dart';
 import 'package:doodi/constants/colors.dart';
 import 'package:doodi/constants/text_style.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert' as convert;
 
 class NewPost extends StatefulWidget {
   void Function(int) changeIndex; // main으로부터 콜백함수를 받아 등록 버튼 클릭 시 홈으로 이동.
