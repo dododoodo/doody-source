@@ -10,6 +10,9 @@ import 'package:doodi/screen/NewPost.dart';
 import 'package:doodi/screen/Settings.dart';
 import 'package:doodi/screen/splash.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // hive 비동기 처리
