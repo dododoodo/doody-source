@@ -51,19 +51,21 @@ class _MyWidgetState extends State<Home> {
 
     // 렌더링
     setState(() {
-      // gameList에 저장시켜서 자동 갱신
-      gameList = jsonData
-          .map(
-            (game) => {
-              'gameId': int.parse(game['id'].toString()),
-              'question': game['quest'],
-              'answerA': game['answerA'],
-              'answerB': game['answerB'],
-              'like': int.parse(game['like_count']),
-              'dislike': int.parse(game['dislike_count']),
-            },
-          )
-          .toList();
+      gameList =
+          jsonData
+              .map(
+                (game) => {
+                  'gameId': int.parse(game['id'].toString()),
+                  'question': game['quest'],
+                  'answerA': game['answerA'],
+                  'answerB': game['answerB'],
+                  'like': int.parse(game['like_count']),
+                  'dislike': int.parse(game['dislike_count']),
+                },
+              )
+              .toList()
+            // 내림차순으로 정렬
+            ..sort((a, b) => b['gameId'].compareTo(a['gameId']));
     });
   }
 
