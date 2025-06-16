@@ -40,6 +40,9 @@ class _GameCardState extends State<GameCard> {
   int answerACount = 0;
   int answerBCount = 0;
 
+  int currentLikeCount = 0;
+  int currentDislikeCount = 0;
+
   // --- A/B 투표 결과 저장하기 ---
   Future<void> vote(String selectedOption, BuildContext context) async {
     // votes 저장소 생성하기
@@ -102,10 +105,27 @@ class _GameCardState extends State<GameCard> {
     });
   }
 
+  Future<void> fetchLikeDislikeCount() async {
+    final url = Uri.parse(
+      'http://localhost/doody/api/get_like_count.php?game_id=${widget.gameId}',
+    );
+    final response = await http.get(url);
+
+    final data = jsonDecode(response.body);
+
+    setState(() {
+      currentLikeCount = data['like'] ?? 0;
+      currentDislikeCount = data['dislike'] ?? 0;
+    });
+  }
+
   // --- 초기 세팅 ---
   @override
   void initState() {
     super.initState(); // 초기화
+
+    currentLikeCount = widget.likeCount;
+    currentDislikeCount = widget.dislikeCount;
 
     // --- 중복 투표 방지 ---
     final box = Hive.box('votes');
@@ -118,6 +138,17 @@ class _GameCardState extends State<GameCard> {
       // A,B 선택 수 가져오기
       fetchVoteCount();
     }
+
+    // 기존 Hive 투표 상태 적용
+    final likeBox = Hive.box('like_dislike');
+    final key = 'game_${widget.gameId}';
+    final action = likeBox.get(key);
+    if (action != null) {
+      isLiked = action == 'like';
+      isDisliked = action == 'dislike';
+    }
+
+    fetchLikeDislikeCount();
   }
 
   // --- 좋아요/싫어요 표시 ---
@@ -145,9 +176,11 @@ class _GameCardState extends State<GameCard> {
       if (action == 'like') {
         isLiked = true;
         isDisliked = false;
+        currentLikeCount += 1;
       } else {
         isDisliked = true;
         isLiked = false;
+        currentDislikeCount += 1;
       }
     });
 
@@ -428,7 +461,7 @@ class _GameCardState extends State<GameCard> {
                   ),
                 ),
                 // 클릭 시 1 증가
-                Text('${widget.likeCount + (isLiked ? 1 : 0)}'),
+                Text('$currentLikeCount'),
 
                 const SizedBox(width: 10),
 
@@ -448,7 +481,7 @@ class _GameCardState extends State<GameCard> {
                         : Theme.of(context).iconTheme.color,
                   ),
                 ),
-                Text('${widget.dislikeCount + (isDisliked ? 1 : 0)}'),
+                Text('$currentDislikeCount'),
 
                 const Spacer(),
 
