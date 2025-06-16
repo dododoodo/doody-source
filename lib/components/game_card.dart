@@ -73,7 +73,7 @@ class _GameCardState extends State<GameCard> {
     }
 
     // 투표 데이터를 보낼 api 주소
-    final url = Uri.parse('$apiurl/doody/api/vote_game.php');
+    final url = Uri.parse('$apiurl/vote_game.php');
     final response = await http.post(
       url,
       // json 형식으로 game_id와 투표 결과를 post로 전달
@@ -95,9 +95,7 @@ class _GameCardState extends State<GameCard> {
   // --- 서버에서 A,B 선택 수 가져오는 함수 ---
   Future<void> fetchVoteCount() async {
     // api 주소 요청, gameId를 파라미터로 전달
-    final url = Uri.parse(
-      '$apiurl/doody/api/get_count.php?game_id=${widget.gameId}',
-    );
+    final url = Uri.parse('$apiurl/get_count.php?game_id=${widget.gameId}');
     final response = await http.get(url);
     print('count response: ${response.body}');
     final data = jsonDecode(response.body);
@@ -151,7 +149,7 @@ class _GameCardState extends State<GameCard> {
     }
 
     // api 호출
-    final url = Uri.parse('$apiurl/doody/api/vote_like.php');
+    final url = Uri.parse('$apiurl/vote_like.php');
     final response = await http.post(
       url,
       headers: {'Content-Type': 'application/json'},
@@ -259,7 +257,7 @@ class _GameCardState extends State<GameCard> {
     if (result == true) {
       final pw = passwordController.text;
 
-      final url = Uri.parse('$apiurl/doody/api/delete_game.php');
+      final url = Uri.parse('$apiurl/delete_game.php');
       final response = await http.post(
         url,
         headers: {'Content-Type': 'application/json'},

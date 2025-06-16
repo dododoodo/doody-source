@@ -44,7 +44,7 @@ class _MyWidgetState extends State<Home> {
   // php서버가 데이터를 보내주게 함 (await로 비동기처리)
   Future<void> fetchGames() async {
     final response = await http.get(
-      Uri.parse("$apiurl/doody/api/get_games.php"),
+      Uri.parse("$apiurl/get_games.php"),
       headers: {'Accept': 'application/json'},
     );
 
