@@ -10,7 +10,6 @@ import 'package:doodi/screen/NewPost.dart';
 import 'package:doodi/screen/Settings.dart';
 import 'package:doodi/screen/splash.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:hive/hive.dart';
 
 void main() async {

@@ -48,7 +48,7 @@ class Alerts extends StatelessWidget {
       content: SingleChildScrollView(
         child: ListBody(
           children: <Widget>[
-            Text(data.content, style: AppTextStyles.lightFree13),
+            Text(data.content, style: AppTextStyles.free12),
             if (data.input != null) data.input!,
           ],
         ),

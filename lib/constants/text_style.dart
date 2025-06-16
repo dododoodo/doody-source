@@ -68,15 +68,12 @@ class AppTextStyles extends GetxController {
   static TextStyle get free10 =>
       TextStyle(fontSize: 10 * scale.value, fontFamily: 'free-4');
 
-  static TextStyle get lightFree13 =>
-      TextStyle(fontSize: 13 * scale.value, fontFamily: 'free-2');
+  static TextStyle get lightFree15 =>
+      TextStyle(fontSize: 15 * scale.value, fontFamily: 'free-2');
 
   static TextStyle get lightFree12 =>
       TextStyle(fontSize: 12 * scale.value, fontFamily: 'free-2');
 
   static TextStyle get lightFree10 =>
       TextStyle(fontSize: 10 * scale.value, fontFamily: 'free-2');
-
-  static TextStyle get lightFree15 =>
-      TextStyle(fontSize: 15 * scale.value, fontFamily: 'free-2');
 }
