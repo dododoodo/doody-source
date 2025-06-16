@@ -21,7 +21,7 @@ class _MyWidgetState extends State<NewPost> {
   void postFormData() async {
     formKey.currentState!.save(); // 여기서 onSaved 실행됨
 
-    var url = Uri.http('localhost', '/php/api/game.php');
+    var url = Uri.parse('http://localhost/doody/api/game.php');
     var response = await http.post(
       url,
       body: {'quest': quest, 'answerA': answerA, 'answerB': answerB, 'pw': pw},
