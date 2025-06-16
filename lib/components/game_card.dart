@@ -99,6 +99,7 @@ class _GameCardState extends State<GameCard> {
       '$apiurl/doody/api/get_count.php?game_id=${widget.gameId}',
     );
     final response = await http.get(url);
+    print('count response: ${response.body}');
     final data = jsonDecode(response.body);
 
     // 투표 수를 A,B 각자 상태값에 저장
