@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:doodi/components/alerts.dart';
 import 'package:doodi/constants/colors.dart';
 import 'package:doodi/constants/text_style.dart';
@@ -13,6 +14,7 @@ class NewPost extends StatefulWidget {
 }
 
 class _MyWidgetState extends State<NewPost> {
+  var apiurl = dotenv.env['API_URL'];
   final formKey = GlobalKey<FormState>();
   bool hasEmptyField = false; // 비어있는 필드일 경우 팝업 생성
   bool isPasswordObscured = true; // 비밀번호 필드 가림 여부
@@ -27,7 +29,7 @@ class _MyWidgetState extends State<NewPost> {
     formKey.currentState!.save(); // 여기서 onSaved 실행됨
 
     // var url = Uri.parse('http://localhost/php/api/game.php');
-    var url = Uri.parse('http://localhost/doody/api/game.php');
+    var url = Uri.parse('$apiurl/doody/api/game.php');
     var res = await http.post(
       url,
       body: {'quest': quest, 'answerA': answerA, 'answerB': answerB, 'pw': pw},

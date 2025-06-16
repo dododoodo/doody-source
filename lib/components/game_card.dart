@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:doodi/constants/colors.dart';
 import 'package:doodi/constants/text_style.dart';
 import 'package:flutter/services.dart';
@@ -33,6 +34,8 @@ class GameCard extends StatefulWidget {
 }
 
 class _GameCardState extends State<GameCard> {
+  var apiurl = dotenv.env['API_URL'];
+
   bool isLiked = false;
   bool isDisliked = false;
   String? selectedOption;
@@ -70,7 +73,7 @@ class _GameCardState extends State<GameCard> {
     }
 
     // 투표 데이터를 보낼 api 주소
-    final url = Uri.parse('http://localhost/doody/api/vote_game.php');
+    final url = Uri.parse('$apiurl/doody/api/vote_game.php');
     final response = await http.post(
       url,
       // json 형식으로 game_id와 투표 결과를 post로 전달
@@ -93,7 +96,7 @@ class _GameCardState extends State<GameCard> {
   Future<void> fetchVoteCount() async {
     // api 주소 요청, gameId를 파라미터로 전달
     final url = Uri.parse(
-      'http://localhost/doody/api/get_count.php?game_id=${widget.gameId}',
+      '$apiurl/doody/api/get_count.php?game_id=${widget.gameId}',
     );
     final response = await http.get(url);
     final data = jsonDecode(response.body);
@@ -147,7 +150,7 @@ class _GameCardState extends State<GameCard> {
     }
 
     // api 호출
-    final url = Uri.parse('http://localhost/doody/api/vote_like.php');
+    final url = Uri.parse('$apiurl/doody/api/vote_like.php');
     final response = await http.post(
       url,
       headers: {'Content-Type': 'application/json'},
@@ -255,7 +258,7 @@ class _GameCardState extends State<GameCard> {
     if (result == true) {
       final pw = passwordController.text;
 
-      final url = Uri.parse('http://localhost/doody/api/delete_game.php');
+      final url = Uri.parse('$apiurl/doody/api/delete_game.php');
       final response = await http.post(
         url,
         headers: {'Content-Type': 'application/json'},
