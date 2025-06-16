@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:doodi/components/alerts.dart';
 import 'package:doodi/constants/colors.dart';
 import 'package:doodi/constants/text_style.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'dart:convert' as convert;
 
 class NewPost extends StatefulWidget {
-  const NewPost({super.key});
+  void Function(int) changeIndex; // main으로부터 콜백함수를 받아 등록 버튼 클릭 시 홈으로 이동.
+  NewPost({super.key, required this.changeIndex});
 
   @override
   State<NewPost> createState() => _MyWidgetState();
@@ -13,24 +15,30 @@ class NewPost extends StatefulWidget {
 
 class _MyWidgetState extends State<NewPost> {
   final formKey = GlobalKey<FormState>();
+  bool hasEmptyField = false; // 비어있는 필드일 경우 팝업 생성
+  bool isPasswordObscured = true; // 비밀번호 필드 가림 여부
+
+  // textfield 변수
   String quest = '';
   String answerA = '';
   String answerB = '';
   String pw = '';
 
-  void postFormData() async {
+  void postFormData(context) async {
     formKey.currentState!.save(); // 여기서 onSaved 실행됨
 
-    var url = Uri.http('localhost', '/php/api/game.php');
-    var response = await http.post(
+    var url = Uri.parse('http://localhost/php/api/game.php');
+    // var url = Uri.parse('http://localhost/doody/api/game.php');
+    var res = await http.post(
       url,
       body: {'quest': quest, 'answerA': answerA, 'answerB': answerB, 'pw': pw},
     );
 
-    if (response.statusCode == 200) {
-      print('서버 응답: ${response.body}');
+    if (res.statusCode == 200) {
+      print('서버 응답: ${res.body}');
+      widget.changeIndex(0);
     } else {
-      print('서버 오류: ${response.statusCode}');
+      print('서버 오류: ${res.statusCode}');
     }
   }
 
@@ -117,44 +125,56 @@ class _MyWidgetState extends State<NewPost> {
 
                         // 입력창
                         TextFormField(
+                          style: AppTextStyles.free13,
                           validator: (value) {
                             // 값이 null이거나 비어있으면 통과 X
                             if (value == null || value.isEmpty) {
-                              return '*항목을 입력해주세요.';
+                              return '*항목을 입력해주세요!';
+                            }
+
+                            // 비밀번호 검증
+                            if (idx == 3) {
+                              final pwReg = RegExp(r'^\d{4}$'); // 숫자 4자리 정규식
+                              if (!pwReg.hasMatch(value)) {
+                                return '*4자리 숫자만 입력할 수 있어요!';
+                              }
                             }
                             return null;
                           },
+                          obscureText: idx == 3 ? isPasswordObscured : false,
+                          obscuringCharacter: '*',
                           decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                width: 0.7,
-                                color: AppColors.lineColor,
-                              ),
-                              borderRadius: BorderRadius.circular(7),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                width: 1.5,
-                                color: AppColors.pointBlue,
-                                // color: const Color.fromARGB(255, 251, 230, 42),
-                              ),
-                              borderRadius: BorderRadius.circular(7),
-                            ),
                             hintText: item['placeholder'],
-                            hintStyle: AppTextStyles.lightFree12.copyWith(
-                              color: AppColors.greyColor,
-                            ),
+                            hintStyle: AppTextStyles.lightFree12,
+                            suffixIcon: idx == 3
+                                ? IconButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        isPasswordObscured =
+                                            !isPasswordObscured;
+                                      });
+                                    },
+                                    icon: Icon(
+                                      isPasswordObscured
+                                          ? Icons.visibility_off_outlined
+                                          : Icons.visibility_outlined,
+                                      size: 18,
+                                      weight: 1.5,
+                                    ),
+                                  )
+                                : null,
                           ),
-                          onSaved: (value) {
+
+                          onChanged: (value) {
                             // index 값에 따라 값 할당
                             if (idx == 0) {
-                              quest = value ?? '';
+                              quest = value;
                             } else if (idx == 1) {
-                              answerA = value ?? '';
+                              answerA = value;
                             } else if (idx == 2) {
-                              answerB = value ?? '';
+                              answerB = value;
                             } else if (idx == 3) {
-                              pw = value ?? '';
+                              pw = value;
                             }
                           },
                         ),
@@ -166,12 +186,10 @@ class _MyWidgetState extends State<NewPost> {
                             alignment: Alignment.centerLeft,
                             child: Text(
                               item['description-more'],
-                              style: AppTextStyles.free10.copyWith(
-                                color: AppColors.greyColor,
-                              ),
+                              style: AppTextStyles.lightFree10,
                             ),
                           ),
-                        SizedBox(height: 14),
+                        SizedBox(height: 24),
                       ],
                     );
                   },
@@ -185,12 +203,24 @@ class _MyWidgetState extends State<NewPost> {
                       final isVaild = formKey.currentState!.validate();
 
                       if (!isVaild) {
-                        // 값이 입력되지 않으면 dialog 표시
-                        warning(context);
-                      } else {
-                        // 값이 유효할 경우 다음 동작 수행
-                        postFormData();
+                        // 입력 필드가 비어있을 경우 dialog 띄우기
+                        bool hasEmptyField =
+                            quest.isEmpty ||
+                            answerA.isEmpty ||
+                            answerB.isEmpty ||
+                            pw.isEmpty;
+
+                        if (hasEmptyField) {
+                          showDialog(
+                            context: context,
+                            builder: (context) => Alerts(type: 'empty'),
+                          );
+                        }
+                        return;
                       }
+
+                      // 제대로 작성했을 경우 서버에 저장 후 홈으로 이동.
+                      postFormData(context);
                     },
                     style: TextButton.styleFrom(
                       backgroundColor: AppColors.pointYellow,
@@ -207,7 +237,7 @@ class _MyWidgetState extends State<NewPost> {
                     ),
                   ),
                 ),
-                SizedBox(height: 14),
+                SizedBox(height: 24),
 
                 Container(
                   width: double.infinity,
@@ -216,20 +246,17 @@ class _MyWidgetState extends State<NewPost> {
                     children: [
                       Text(
                         '※ 밸런스 게임 질문 등록 시 주의사항',
-                        style: AppTextStyles.lightFree12.copyWith(
-                          color: AppColors.greyColor,
-                        ),
+                        style: AppTextStyles.lightFree12,
                       ),
                       SizedBox(height: 3),
                       Text(
                         '- 다른 사용자에게 위화감을 조성하거나 특정 사용자를 비난/저격/공격하는 질문은 관리자에 의해 삭제될 수 있습니다.\n- 초상권/저작권 침해 등 타인의 권리를 침해하는 글은 관리자에 의해 삭제될 수 있습니다.\n- 비방/차별/인신공격이 포함되거나 욕설이 포함된 글은 관리자에 의해 삭제될 수 있습니다.',
-                        style: AppTextStyles.lightFree10.copyWith(
-                          color: AppColors.greyColor,
-                        ),
+                        style: AppTextStyles.lightFree10,
                       ),
                     ],
                   ),
                 ),
+                SizedBox(height: 14),
               ],
             ),
           ),
@@ -238,53 +265,61 @@ class _MyWidgetState extends State<NewPost> {
     );
   }
 
-  void warning(context) {
+  void emptyDialog(context) {
     showDialog(
       context: context,
-      builder: (context) {
-        return Align(
-          alignment: Alignment.centerLeft,
-          child: Dialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
+      barrierDismissible: true,
+
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 5),
+                child: Icon(Icons.error_outline),
+              ),
+
+              Text(
+                '알림',
+                style: AppTextStyles.free15.copyWith(
+                  color: Theme.of(context).iconTheme.color,
+                ),
+              ),
+            ],
+          ),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(
+                  '필수 입력 항목을 작성하지 않았습니다.',
+                  style: AppTextStyles.lightFree12.copyWith(
+                    color: Theme.of(context).iconTheme.color,
+                  ),
+                ),
+              ],
             ),
-            backgroundColor: AppColors.whiteColor,
-            child: Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
+          ),
+          actions: <Widget>[
+            Container(
+              height: 25,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Row(
-                    children: [
-                      Icon(Icons.info_outline_rounded),
-                      SizedBox(width: 5),
-                      Text('알림', style: AppTextStyles.free15),
-                    ],
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    '필수 입력 항목을 작성하지 않았습니다.',
-                    style: AppTextStyles.free10.copyWith(
-                      color: AppColors.greyColor,
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: TextButton(
-                      onPressed: () {},
-                      child: Text(
-                        '확인',
-                        style: AppTextStyles.free13.copyWith(
-                          color: AppColors.pointBlue,
-                        ),
+                  TextButton(
+                    child: Text(
+                      '확인',
+                      style: AppTextStyles.free15.copyWith(
+                        color: AppColors.pointBlue,
                       ),
                     ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
                   ),
                 ],
               ),
             ),
-          ),
+          ],
         );
       },
     );

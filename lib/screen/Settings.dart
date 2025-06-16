@@ -1,6 +1,10 @@
-import 'package:doodi/widget/Settings_fontSizeSlider.dart';
+import 'package:doodi/constants/colors.dart';
+import 'package:doodi/constants/text_style.dart';
+import 'package:doodi/controller/theme_controller.dart';
+import 'package:doodi/widget/fontSize_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:doodi/widget/Settings_themeToggle.dart';
+import 'package:doodi/widget/theme_toggle.dart';
+import 'package:get/get.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 
 class Settings extends StatefulWidget {
@@ -11,22 +15,30 @@ class Settings extends StatefulWidget {
 }
 
 class _MyWidgetState extends State<Settings> {
-  int themeIdx = 0; // 화면 모드 상태 변수 (0: 라이트모드 1: 다크)
-  double fontSizeState = 1.0; // 텍스트 사이즈 상태 변수 (0, 1, 2)
+  final controller = Get.find<ThemeController>(); // 테마 변경용 컨트롤러
+  final controller2 = Get.find<AppTextStyles>(); // 텍스트 사이즈 변경용 컨트롤러
 
-  // 토글 관리 함수 (테마 변경용)
-  void handleToggle(int idx) {
+  // scale 값 변경 함수
+  void updateTextScale(double idx) {
     setState(() {
-      themeIdx = idx;
-      print('테마 변경: ${idx == 1 ? "다크 모드" : "라이트 모드"}');
-    });
-  }
+      late double num;
+      switch (idx) {
+        case 0:
+          num = 0.9;
+          break;
+        case 1:
+          num = 1.0;
+          break;
+        case 2:
+          num = 1.2;
+          break;
+        default:
+          AppTextStyles.scale.value = 1.0;
+      }
 
-  // 슬라이더 관리 함수 (폰트 사이즈 변경용)
-  void handleSlider(double state) {
-    setState(() {
-      fontSizeState = state;
-      print('크기 변경: $state');
+      // 각 인덱스 값에 따라 scal값 변경 후 컨트롤러 내 함수를 통해 hive 저장.
+      AppTextStyles.scale.value = num;
+      controller2.handleScale(num);
     });
   }
 
@@ -36,14 +48,22 @@ class _MyWidgetState extends State<Settings> {
       {
         "icon": Symbols.settings_night_sight,
         "title": '화면 모드',
-        "content": ThemeToggle(themeIdx: themeIdx, onToggle: handleToggle),
+        "content": Obx(
+          () => ThemeToggle(
+            themeIdx: controller.themeIdx.value,
+            onToggle: (idx) {
+              controller.handleTheme(idx); // 선택된 인덱스에 따라 테마 적용
+            },
+          ),
+        ),
       },
       {
         "icon": Icons.text_fields,
         "title": '텍스트 크기',
         "content": FontSizeSlider(
-          fontSizeState: fontSizeState,
-          onChanged: handleSlider,
+          onChanged: (idx) {
+            updateTextScale(idx);
+          },
         ),
       },
       {
@@ -51,12 +71,13 @@ class _MyWidgetState extends State<Settings> {
         "title": '앱 정보',
         "content": Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
+          children: [
             Text(
-              '두디 Doodi - 밸런스 게임 커뮤니티 어플리케이션\n버전 1.0.0\n개발자 dododoodo, Jiho8\nⓒ 2025. dododoodo / Jiho8 All rights reserved.',
-              style: TextStyle(
-                fontFamily: 'free-2',
-                color: Color.fromARGB(255, 118, 118, 118),
+              '두디 Dood - 밸런스 게임 커뮤니티 어플리케이션\n버전 1.0.0\n개발자 dododoodo, Jiho8\nⓒ 2025. dododoodo / Jiho8 All rights reserved.',
+              style: AppTextStyles.lightFree12.copyWith(
+                color: controller.themeIdx == 0
+                    ? AppColors.greyColor
+                    : AppColors.whiteColor,
               ),
             ),
           ],
@@ -69,10 +90,7 @@ class _MyWidgetState extends State<Settings> {
       children: [
         Container(
           margin: EdgeInsets.only(top: 20, bottom: 24),
-          child: Text(
-            '나만의 스타일로\n어플을 설정하세요!',
-            style: TextStyle(fontFamily: 'ria-r', fontSize: 17),
-          ),
+          child: Text('나만의 스타일로\n어플을 설정하세요!', style: AppTextStyles.pageTitle),
         ),
 
         ListView.builder(
@@ -87,9 +105,12 @@ class _MyWidgetState extends State<Settings> {
                 // 아이콘 + 타이틀
                 Row(
                   children: [
-                    Icon(item['icon']),
+                    Icon(
+                      item['icon'],
+                      color: Theme.of(context).iconTheme.color,
+                    ),
                     SizedBox(width: 7),
-                    Text(item['title'], style: TextStyle(fontSize: 15)),
+                    Text(item['title'], style: AppTextStyles.free15),
                   ],
                 ),
                 SizedBox(height: 10),

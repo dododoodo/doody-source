@@ -1,66 +1,54 @@
-// import 'package:doodi/screen/NewPost.dart';
+import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:get/get.dart';
+import 'package:doodi/constants/text_style.dart';
+import 'package:doodi/constants/colors.dart';
+import 'package:doodi/controller/theme_controller.dart';
+import 'package:doodi/controller/splash_controller.dart';
 import 'package:doodi/screen/Home.dart';
 import 'package:doodi/screen/NewPost.dart';
 import 'package:doodi/screen/Settings.dart';
-import 'package:flutter/material.dart';
-import 'package:doodi/constants/colors.dart';
+import 'package:doodi/screen/splash.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized(); // hive 비동기 처리
+
+  await Hive.initFlutter(); // hive 초기화
+  await Hive.openBox('settings');
+  await Hive.openBox('splash');
+
+  // 전역 state 사용 준비
+  final themeController = Get.put(ThemeController());
+  Get.put(AppTextStyles());
+  Get.put(SplashController());
+  themeController.loadTheme();
+
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'doody',
+    final themeController = Get.find<ThemeController>();
+    final splashController = Get.find<SplashController>();
 
-      // Light Theme (default)
-      theme: ThemeData(
-        scaffoldBackgroundColor: AppColors.whiteColor,
-        appBarTheme: AppBarTheme(backgroundColor: AppColors.whiteColor),
-        bottomAppBarTheme: BottomAppBarTheme(color: AppColors.whiteColor),
-        iconTheme: IconThemeData(color: AppColors.blackColor),
-        fontFamily: 'free-4',
-        textTheme: const TextTheme(
-          bodyMedium: TextStyle(color: AppColors.blackColor),
-        ),
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: AppColors.blackColor,
-          brightness: Brightness.light,
-        ),
-        cardColor: AppColors.whiteColor,
-        dividerColor: AppColors.lineColor,
-      ),
-
-      // Dark Theme
-      darkTheme: ThemeData(
-        scaffoldBackgroundColor: AppColors.blackColor,
-        appBarTheme: AppBarTheme(backgroundColor: AppColors.blackColor),
-        bottomAppBarTheme: BottomAppBarTheme(color: AppColors.blackColor),
-        iconTheme: IconThemeData(color: AppColors.whiteColor),
-        textTheme: const TextTheme(
-          bodyMedium: TextStyle(color: AppColors.whiteColor),
-        ),
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: AppColors.whiteColor,
-          brightness: Brightness.dark,
-        ),
-        cardColor: Color(0xFF1E1E1E),
-        dividerColor: AppColors.darkModeColor,
-      ),
-
-      themeMode: ThemeMode.system,
-      home: const MyHomePage(title: '두디-Doody'),
-    );
+    return Obx(() {
+      return GetMaterialApp(
+        title: 'doody',
+        theme: themeController.theme.value, // default: Light Theme
+        themeMode: ThemeMode.system,
+        debugShowCheckedModeBanner: false,
+        home: splashController.showSplash.value
+            ? SplashScreen()
+            : MyHomePage(title: '두디-Doody'),
+      );
+    });
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+  MyHomePage({super.key, required this.title});
   final String title;
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -76,7 +64,11 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  List<Widget> get pageList => [Home(), NewPost(), Settings()];
+  List<Widget> get pageList => [
+    Home(),
+    NewPost(changeIndex: changeIndex),
+    Settings(),
+  ];
 
   @override
   Widget build(BuildContext context) {
