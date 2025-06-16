@@ -57,11 +57,7 @@ class _GameCardState extends State<GameCard> {
         SnackBar(
           content: Text(
             '이미 투표한 게임입니다.',
-            style: TextStyle(
-              color: textColor,
-              fontFamily: 'free-2',
-              fontSize: 15,
-            ),
+            style: AppTextStyles.lightFree15.copyWith(color: textColor),
           ),
           duration: Duration(seconds: 2),
           backgroundColor: bgColor,
@@ -180,18 +176,17 @@ class _GameCardState extends State<GameCard> {
                 padding: const EdgeInsets.only(right: 7),
                 child: Icon(Icons.error_outline),
               ),
-              Text(
-                '게임 삭제',
-                style: TextStyle(fontFamily: 'free-4', fontSize: 17),
-              ),
+              Text('게임 삭제', style: AppTextStyles.free17),
             ],
           ),
           content: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
                 '등록 시 설정한 4자리 비밀번호를 입력하세요.',
-                style: TextStyle(fontFamily: 'free-2', fontSize: 15),
+                textAlign: TextAlign.left,
+                style: AppTextStyles.free12,
               ),
               SizedBox(height: 10),
               SizedBox(
@@ -205,7 +200,7 @@ class _GameCardState extends State<GameCard> {
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     hintText: '예) 1234',
-                    hintStyle: TextStyle(fontSize: 15, fontFamily: 'free-4'),
+                    hintStyle: AppTextStyles.free15,
                     contentPadding: EdgeInsets.symmetric(
                       vertical: 8,
                       horizontal: 8,
@@ -220,8 +215,7 @@ class _GameCardState extends State<GameCard> {
               onPressed: () => Navigator.of(context).pop(false),
               child: Text(
                 '취소',
-                style: TextStyle(
-                  fontFamily: 'free-4',
+                style: AppTextStyles.free13.copyWith(
                   color: Theme.of(context).textTheme.bodyMedium?.color,
                 ),
               ),
@@ -230,8 +224,7 @@ class _GameCardState extends State<GameCard> {
               onPressed: () => Navigator.of(context).pop(true),
               child: Text(
                 '삭제',
-                style: TextStyle(
-                  fontFamily: 'free-4',
+                style: AppTextStyles.free13.copyWith(
                   color: AppColors.pointBlue,
                 ),
               ),
@@ -258,11 +251,7 @@ class _GameCardState extends State<GameCard> {
           SnackBar(
             content: Text(
               '삭제가 완료되었습니다.',
-              style: TextStyle(
-                color: textColor,
-                fontFamily: 'free-2',
-                fontSize: 15,
-              ),
+              style: AppTextStyles.lightFree15.copyWith(color: textColor),
             ),
             duration: Duration(seconds: 2),
             backgroundColor: bgColor,
@@ -274,11 +263,7 @@ class _GameCardState extends State<GameCard> {
           SnackBar(
             content: Text(
               '비밀번호가 일치하지 않습니다.',
-              style: TextStyle(
-                color: textColor,
-                fontFamily: 'free-2',
-                fontSize: 15,
-              ),
+              style: AppTextStyles.lightFree15.copyWith(color: textColor),
             ),
             duration: Duration(seconds: 2),
             backgroundColor: bgColor,
@@ -357,10 +342,8 @@ class _GameCardState extends State<GameCard> {
                             if (selectedOption != null)
                               Text(
                                 '$answerACount명',
-                                style: TextStyle(
+                                style: AppTextStyles.boldFree15.copyWith(
                                   color: AppColors.whiteColor,
-                                  fontFamily: 'free-7',
-                                  fontSize: 15,
                                 ),
                               ),
                           ],
@@ -411,10 +394,8 @@ class _GameCardState extends State<GameCard> {
                             if (selectedOption != null)
                               Text(
                                 '$answerBCount명',
-                                style: TextStyle(
+                                style: AppTextStyles.boldFree15.copyWith(
                                   color: AppColors.blackColor,
-                                  fontFamily: 'free-7',
-                                  fontSize: 15,
                                 ),
                               ),
                           ],

@@ -124,9 +124,7 @@ class _MyWidgetState extends State<Home> {
                     Text(
                       '검색어와 일치하는\n게임이 없습니다.',
                       textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        fontFamily: 'free-4',
-                        fontSize: 12,
+                      style: AppTextStyles.free12.copyWith(
                         color: Theme.of(context).brightness == Brightness.dark
                             ? AppColors.lineColor
                             : AppColors.darkModeColor,
