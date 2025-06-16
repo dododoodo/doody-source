@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:get/get.dart';
 import 'package:doodi/constants/text_style.dart';
@@ -26,7 +27,7 @@ void main() async {
   Get.put(AppTextStyles());
   Get.put(SplashController());
   themeController.loadTheme();
-
+  await dotenv.load();
   runApp(MyApp());
 }
 

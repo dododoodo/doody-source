@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:doodi/constants/colors.dart';
 import 'package:doodi/constants/text_style.dart';
 import 'package:doodi/components/game_card.dart';
@@ -19,7 +20,7 @@ class Home extends StatefulWidget {
 
 class _MyWidgetState extends State<Home> {
   final ScrollController _scrollController = ScrollController();
-
+  var apiurl = dotenv.env['API_URL'];
   // 게임 데이터 가져오기
   List<Map<String, dynamic>> gameList = [];
 
@@ -43,7 +44,8 @@ class _MyWidgetState extends State<Home> {
   // php서버가 데이터를 보내주게 함 (await로 비동기처리)
   Future<void> fetchGames() async {
     final response = await http.get(
-      Uri.parse("http://localhost/doody/api/get_games.php"),
+      Uri.parse("$apiurl/doody/api/get_games.php"),
+      headers: {'Accept': 'application/json'},
     );
 
     // json으로 받은걸 dart 객체로 바꾸기
