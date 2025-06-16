@@ -105,20 +105,6 @@ class _GameCardState extends State<GameCard> {
     });
   }
 
-  Future<void> fetchLikeDislikeCount() async {
-    final url = Uri.parse(
-      'http://localhost/doody/api/get_like_count.php?game_id=${widget.gameId}',
-    );
-    final response = await http.get(url);
-
-    final data = jsonDecode(response.body);
-
-    setState(() {
-      currentLikeCount = data['like'] ?? 0;
-      currentDislikeCount = data['dislike'] ?? 0;
-    });
-  }
-
   // --- 초기 세팅 ---
   @override
   void initState() {
@@ -147,8 +133,6 @@ class _GameCardState extends State<GameCard> {
       isLiked = action == 'like';
       isDisliked = action == 'dislike';
     }
-
-    fetchLikeDislikeCount();
   }
 
   // --- 좋아요/싫어요 표시 ---
