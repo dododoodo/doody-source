@@ -1,6 +1,8 @@
 
 ![썸네일목업_1](https://github.com/user-attachments/assets/ec322852-32ee-41e2-8c13-7ef4af58375c)
 
+# 두디 (Doody) - 밸런스 게임 어플리케이션
+
 ## 📢 소개
 사용자가 직접 밸런스 게임을 만들고, 다른 사람들과 함께 즐길 수 있는 SPA 웹사이트, <b>"Doody"</b> 입니다. <br>
 
