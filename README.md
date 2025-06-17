@@ -1,4 +1,5 @@
 
+![썸네일목업_1](https://github.com/user-attachments/assets/ec322852-32ee-41e2-8c13-7ef4af58375c)
 
 ## 📢 소개
 사용자가 직접 밸런스 게임을 만들고, 다른 사람들과 함께 즐길 수 있는 SPA 웹사이트, <b>"Doody"</b> 입니다. <br>
@@ -14,7 +15,7 @@
 
 
 ## 🔗 배포 URL
-https://doody-nine.vercel.app/
+[https://doody-nine.vercel.app/](https://doody-theta.vercel.app/)
 
 ## 📑 프로젝트 요약
 
@@ -54,8 +55,8 @@ https://doody-nine.vercel.app/
 
 | 이름 | 주요 페이지 컴포넌트 | 해당 |
 | :---: | :---: | :---: |
-| 김도연 | main.dart, Home.dart |  |
-| 천지호 | NewPost.dart, Settings.dart, splash.dart | ✔ |
+| 김도연 | main.dart, Home.dart | ✔ |
+| 천지호 | NewPost.dart, Settings.dart, splash.dart |  |
 
 ## 💡 주요 기능
 
@@ -138,19 +139,34 @@ https://doody-nine.vercel.app/
 | **Figma** | **디자인 & UI/UX**|![Figma](https://img.shields.io/badge/Figma-F24E1E?style=flat-square&logo=Figma&logoColor=white) |
 
 ## 📚 참고 URL
-- 기획 및 화면 설계 :
-- 발표 자료 :
-- 인터페이스 구현 보고서 :
-- 프로젝트 완료 보고서 :
+- 피그마 프로젝트 : https://www.figma.com/design/XMwCWzd3pIB1UPIdR7vC40/A%EC%A1%B0-%EB%8F%84%EC%97%B0%EC%A7%80%ED%98%B8?node-id=3311-2&t=Tp4sipc6JbRqXgBW-1
+- 발표 자료 : 
+- 스토리보드 : 
+- UI 프로토타입 : 
+- 프로젝트 완료 보고서 : 
 
 <hr>
 
-# ***의 개발 상세
-
-## 📑 요약
-
-### 담당 페이지 목록
-
-## 🧩 공통 컴포넌트
+## 🎮 개발 상세
 
 ## 💥 이슈 및 해결
+
+## 🖼️ 미리보기
+
+![썸네일목업_2](https://github.com/user-attachments/assets/7436675b-31ab-49d4-9f86-88d38be370d9)
+
+<p float="center">
+  <img src="https://github.com/user-attachments/assets/f9b478e3-73a7-41eb-9b44-dfe9e9e9b448" width="49%" />
+  <img src="https://github.com/user-attachments/assets/43de98d5-7bb8-4851-a259-28b2c36276ac" width="49%" />
+
+
+<p float="center">
+    <td><img src="https://github.com/user-attachments/assets/8cbb64a3-49f8-4976-b328-3d87a8bdd5bf"  width="49%"/></td>
+    <td><img src="https://github.com/user-attachments/assets/1031b5d9-9d85-40c3-a2f9-429b40930d37"  width="49%"/></td>
+</p>
+
+<p float="center">
+    <td><img src="https://github.com/user-attachments/assets/6974a0d6-9385-4f8f-949e-1fbd999f90b4" width="49%"/></td>
+    <td><img src="https://github.com/user-attachments/assets/32f9b9bb-34dc-4282-b75f-abba08b524d3"  width="49%"/></td>
+</p>
+
