@@ -17,7 +17,7 @@
 
 
 ## 🔗 배포 URL
-[https://doody-nine.vercel.app/](https://doody-theta.vercel.app/)
+[https://doody-theta.vercel.app/](https://doody-theta.vercel.app/)
 
 ## 📑 프로젝트 요약
 
