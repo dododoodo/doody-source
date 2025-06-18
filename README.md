@@ -17,7 +17,7 @@
 
 
 ## 🔗 배포 URL
-[https://doody-theta.vercel.app/](https://doody-theta.vercel.app/)
+[두디-밸런스 게임 어플리케이션](https://doody-theta.vercel.app/)
 
 ## 📑 프로젝트 요약
 
